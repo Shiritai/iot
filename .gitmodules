@@ -1,0 +1,3 @@
+[submodule "oh-my-scripts"]
+	path = oh-my-scripts
+	url = https://github.com/Shiritai/oh-my-scripts.git
