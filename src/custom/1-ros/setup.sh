@@ -1,5 +1,13 @@
 #!/bin/bash
 
+set -e
+
+SCRIPT_DIR=$(realpath $(dirname $0))
+# source all utils scripts
+for item in $SCRIPT_DIR/../../utils/*.sh; do . $item; done
+
+print_info "Installing ROS2, run pre-install commands"
+
 INSTALL="sudo apt install -y"
 UPDATE="sudo apt update -y"
 
@@ -18,6 +26,8 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 
 $UPDATE && sudo apt upgrade
 
+print_info "Ready to install ROS2"
+
 $INSTALL ros-humble-desktop
 $INSTALL ros-humble-ros-base
 $INSTALL ros-dev-tools
@@ -26,3 +36,5 @@ source /opt/ros/humble/setup.bash
 
 echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 echo "source /opt/ros/humble/setup.zsh" >> ~/.zshrc
+
+print_info "ROS2 installed successfully"
