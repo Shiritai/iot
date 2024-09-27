@@ -1,19 +1,31 @@
 #!/bin/bash
 
+set -e
+
+SCRIPT_DIR=$(realpath $(dirname $0))
+# source all utils scripts
+for item in $SCRIPT_DIR/../../utils/*.sh; do . $item; done
+
+print_info "Download autoware"
+
 sudo apt update -y && sudo apt install -y python3.10-venv apt-utils
 
 cd ~
 git clone https://github.com/autowarefoundation/autoware.git -b release/2024.03
 cd ~/autoware
 
+print_info "Install autoware"
+
 ./setup-dev-env.sh -y --no-nvidia
 
 # Compile autoware
+print_info "Preparing compilation environment of autoware"
+
 mkdir src
 vcs import src < autoware.repos
 
 # override buggy file
-cp ~/scripts/dev/autoware/package.xml \
+cp $SCRIPT_DIR/package.xml \
     ~/autoware/src/universe/autoware.universe/evaluator/perception_online_evaluator
 
 source /opt/ros/humble/setup.bash
@@ -33,4 +45,7 @@ echo "export CXX=/usr/lib/ccache/g++" >> ~/.zshrc
 echo "export CCACHE_DIR=${HOME}/.cache/ccache/" >> ~/.zshrc
 
 # Run compilation
+print_info "Compile autoware"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+print_info "Autoware compiled successfully"
