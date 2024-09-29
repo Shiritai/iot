@@ -48,7 +48,6 @@ print_info "Compile autoware"
 colcon build --symlink-install \
              --parallel-workers 32 \
              --cmake-args \
-             -DCMAKE_CUDA_ARCHITECTURES=native \
              -DCMAKE_BUILD_TYPE=Release
 
 print_info "Autoware compiled successfully"
