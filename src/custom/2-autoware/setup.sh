@@ -20,6 +20,7 @@ print_info "Install autoware"
 print_info "Preparing compilation environment of autoware"
 
 mkdir src
+git config --global --unset https.proxy # fix possible incorrect proxy setting
 vcs import src < autoware.repos
 
 # override buggy file
