@@ -3,12 +3,10 @@
 set -e
 
 SCRIPT_DIR=$(realpath $(dirname $0))
-# source all utils scripts
-for item in $SCRIPT_DIR/../../utils/*.sh; do . $item; done
 
 print_info "Download autoware"
 
-sudo apt update -y && sudo apt install -y python3.10-venv apt-utils
+install_if_dne python3.10-venv apt-utils
 
 cd ~
 git clone https://github.com/autowarefoundation/autoware.git -b release/2024.03
