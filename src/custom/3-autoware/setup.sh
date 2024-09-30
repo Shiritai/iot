@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 SCRIPT_DIR=$(realpath $(dirname $0))
 
 print_info "Download autoware"
@@ -24,16 +22,28 @@ source ~/.bashrc
 print_info "Preparing compilation environment of autoware"
 
 mkdir src
-git config --global --unset https.proxy # fix possible incorrect proxy setting
-vcs import src < autoware.repos
+# error may occur at the first time, run twice if needed may solve the issue
+vcs import src < autoware.repos || vcs import src < autoware.repos
+
+print_info "Autoware src prepared"
 
 # override buggy file
 cp $SCRIPT_DIR/package.xml \
     ~/autoware/src/universe/autoware.universe/evaluator/perception_online_evaluator
 
-source /opt/ros/humble/setup.bash
+print_info "Install ros packages"
+
+. /opt/ros/humble/setup.bash
+sudo apt-get update -y && sudo apt-get upgrade -y
 rosdep update
-rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+rosdep install -y --from-paths src \
+                  --ignore-src \
+                  --rosdistro $ROS_DISTRO \
+                  > /dev/null 2>&1
+
+print_info "Autoware repo is ready"
+
+print_info "Setup ccache..."
 
 mkdir -p ~/.cache/ccache
 touch ~/.cache/ccache/ccache.conf
@@ -46,6 +56,8 @@ echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.bashrc
 echo "export CC=/usr/lib/ccache/gcc" >> ~/.zshrc
 echo "export CXX=/usr/lib/ccache/g++" >> ~/.zshrc
 echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.zshrc
+
+print_info "Setup ccache successfully"
 
 # Run compilation
 print_info "Compile autoware"
