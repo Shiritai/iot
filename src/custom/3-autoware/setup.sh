@@ -14,6 +14,10 @@ cd ~/autoware
 
 print_info "Install autoware"
 
+echo "export PATH=\$PATH:/home/shiritai/.local/bin" >> ~/.bashrc
+echo "export PATH=\$PATH:/home/shiritai/.local/bin" >> ~/.zshrc
+source ~/.bashrc
+
 ./setup-dev-env.sh -y --no-nvidia
 
 # Compile autoware
@@ -37,11 +41,11 @@ echo "max_size = 60G" >> ~/.cache/ccache/ccache.conf
 
 echo "export CC=/usr/lib/ccache/gcc" >> ~/.bashrc
 echo "export CXX=/usr/lib/ccache/g++" >> ~/.bashrc
-echo "export CCACHE_DIR=${HOME}/.cache/ccache/" >> ~/.bashrc
+echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.bashrc
 
 echo "export CC=/usr/lib/ccache/gcc" >> ~/.zshrc
 echo "export CXX=/usr/lib/ccache/g++" >> ~/.zshrc
-echo "export CCACHE_DIR=${HOME}/.cache/ccache/" >> ~/.zshrc
+echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.zshrc
 
 # Run compilation
 print_info "Compile autoware"
