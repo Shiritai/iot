@@ -4,7 +4,7 @@ SCRIPT_DIR=$(realpath $(dirname $0))
 
 print_info "Download autoware"
 
-WD=$1
+WD=${$WD:-${HOME}}
 
 cd $WD
 git clone https://github.com/autowarefoundation/autoware.git -b release/2024.03
@@ -39,25 +39,10 @@ rosdep install -y --from-paths src \
 
 print_info "Autoware repo is ready, compile autoware"
 
-# prepare repo for compilation with different argument
-mkdir -p ../expr
-cp -r . ../expr/autoware
-
 # Run compilation
 colcon build --symlink-install \
              --parallel-workers 32 \
              --cmake-args \
-             -DCMAKE_BUILD_TYPE=Release &
-
-# Run compilation: experimental 
-# -DCMAKE_CUDA_ARCHITECTURES=native paramener
-cd ../expr/autoware
-colcon build --symlink-install \
-             --parallel-workers 32 \
-             --cmake-args \
-             -DCMAKE_CUDA_ARCHITECTURES=native \
-             -DCMAKE_BUILD_TYPE=Release &
-
-wait
+             -DCMAKE_BUILD_TYPE=Release
 
 print_info "Autoware compiled successfully"

@@ -16,12 +16,10 @@ mkdir -p ~/.cache/ccache
 touch ~/.cache/ccache/ccache.conf
 echo "max_size = 60G" >> ~/.cache/ccache/ccache.conf
 
-echo "export CUDACXX=/usr/local/cuda/bin/nvcc" >> ~/.bashrc
 echo "export CC=/usr/lib/ccache/gcc" >> ~/.bashrc
 echo "export CXX=/usr/lib/ccache/g++" >> ~/.bashrc
 echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.bashrc
 
-echo "export CUDACXX=/usr/local/cuda/bin/nvcc" >> ~/.zshrc
 echo "export CC=/usr/lib/ccache/gcc" >> ~/.zshrc
 echo "export CXX=/usr/lib/ccache/g++" >> ~/.zshrc
 echo "export CCACHE_DIR=\${HOME}/.cache/ccache/" >> ~/.zshrc
