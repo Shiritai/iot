@@ -4,7 +4,7 @@ SCRIPT_DIR=$(realpath $(dirname $0))
 
 print_info "Download autoware"
 
-WD=${$WD:-${HOME}}
+WD=${WD:-${HOME}}
 
 cd $WD
 git clone https://github.com/autowarefoundation/autoware.git -b release/2024.03
