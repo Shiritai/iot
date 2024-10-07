@@ -38,3 +38,32 @@ ros2 launch autoware_launch \
     map_path:=/home/jetson/autoware_map/sample-map-planning \
     vehicle_model:=sample_vehicle \
     sensor_model:=sample_sensor_kit
+
+# 錄製資料
+ros2 bag record /sensing/lidar/bf_lidar/points_raw \
+    /sensing/camera/zedxm/zed_node/rgb/image_rect_color \
+    /sensing/camera/zedxm/zed_node/rgb/camera_info
+
+# 執行校正工具
+ros2 launch extrinsic_calibration_manager \
+    calibration.launch.xml \
+    mode:=interactive \
+    sensor_model:=sample_sensor_kit \
+    vehicle_model:=sample_vehicle \
+    vehicle_id:=default \
+    camera_name:=zedxm
+
+# 播放錄製的資料
+ros2 bag play <rosbag file> --clock -l -r 0.1
+
+# 執行手動校正工具
+ros2 launch extrinsic_calibration_manager \
+    calibration.launch.xml \
+    mode:=manual \
+    sensor_model:=sample_sensor_kit \
+    vehicle_model:=sample_vehicle \
+    vehicle_id:=default
+
+# 校正完後，另外開啟 terminal，並執行以下指令儲存校正結果
+ros2 topic pub /done std_msgs/Bool "data: true"
+
